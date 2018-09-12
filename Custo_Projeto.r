@@ -109,11 +109,15 @@ CustoTotal <- function(tamanho, amostra){
   #Custo total
   CT <- CustoCerto + CustoCont
   
-  hist(CT)
+  hist(CT, main="Custo total da construção do Gasoduto", col="sienna",
+       xlab = "Custo (USD)", ylab="Frequência")
   
   x<- ecdf(CT)
-  plot(x)
+  plot(x, main = "Função Cumulativa do Custo do Gasoduto",
+       xlab = "Custo (USD)", ylab = "Pr (CT <= x)")
   
+  #Qual a probabilidade CT<=45000000
+  print("A probablididade do custo total ser maior que $45M é:")
   x(45000000)
 }
 
