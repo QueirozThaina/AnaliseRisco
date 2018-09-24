@@ -118,7 +118,7 @@ q2A <- function(){
   plot(x, main = "Função Acumulada do Custo de Mão-de-Obra")
   abline(v=quantil, col="red")
   
-  quantil
+  round(quantil,2)
 }
 
 q2B <- function(){
@@ -133,3 +133,83 @@ q2B <- function(){
   qqnorm(TCL, main="Distribuição de custo - Via: TCL")
 }
 
+##############################QUESTÃO 3##############################
+
+#Função que simula o gasto de um ano
+gastoSexta <- function(){
+  #sorteia quantas sextas-feiras o ano terá
+  nSextas <- sample(40:42,1)
+  
+  #Numero de executivos que vão almoçar em cada sexta-feira
+  qPessoas <- round(rtriangle(nSextas, 16,22,18))
+  
+  totalAnual <- numeric(nSextas)
+  #calcula qual o valor da conta de cada um dos executivos no almoço
+  for (i in 1:nSextas){
+    total1 <- sum(rtriangle(qPessoas[i], 25,36,28))
+    totalAnual[i] <- total1
+    
+  }
+  
+  sum(totalAnual)
+  
+}
+
+q3<- function(N=3000){
+  
+  #Simulando o gasto anual da empresa N vezes
+  totalAnos <- replicate(N, gastoSexta())
+  
+  hist(totalAnos, main = "Gasto Anual da empresa com os almoços")
+  
+  x <- ecdf(totalAnos)
+  
+  #Assumindo um Risco de Custo de 85%:
+  
+  quantil <- quantile(x, 0.85)
+  
+  
+  
+  plot(x, main = "Função Acumulada do Custo anual com os Almoços")
+  
+  abline(v=quantil, col="red")
+  
+  
+  print(paste("Alvo de Custo", round(quantil,digits=2)))
+  #quantil
+  
+}
+
+##############################QUESTÃO 4##############################
+#Calcula o lucro de um mês do restaurante
+lucroMensal <- function(){
+  #numero de grupos por dia
+  nGrupos <- round(rtriangle(30, 40,120,60))
+  total <- numeric(30)
+  #gasto cada grupo
+  for(i in 1:30){
+    gastoGrupoDiario <- rtriangle(nGrupos[i], 90,250,130)
+    lucroDiario <- rtriangle(nGrupos[i], 1.15,1.3,1.22)
+    totalDia <- sum(gastoGrupoDiario * lucroDiario)
+    total[i] <- totalDia
+  }
+  totalMensal <- sum(total)
+  
+  totalMensal
+}
+
+#Calculo do "valor presente do lucro total" (juros compostos)
+vLucroTotal <- function(){
+  montante <- lucroMensal() #Lucro de um mês do restaurante
+  taxa <- 0.065 #Taxa Selic
+  juros <- montante*((1+taxa)**12) #Calculo dos juros compostos
+  juros
+}
+
+q4 <- function(amostra=3000){
+  #Simulação do lucro em um ano
+  lucroAnual <- replicate(amostra,vLucroTotal())
+  
+  hist(lucroAnual, main = "Valor Presente do Lucro total", xlab = "Lucro primeiro ano",
+       ylab = "Frequencia")
+}
