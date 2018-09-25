@@ -198,13 +198,24 @@ lucroMensal <- function(){
   totalMensal
 }
 
+
 #Calculo do "valor presente do lucro total" (juros compostos)
 vLucroTotal <- function(){
-  montante <- lucroMensal() #Lucro de um mês do restaurante
-  taxa <- 0.065 #Taxa Selic
-  juros <- montante*((1+taxa)**12) #Calculo dos juros compostos
-  juros
+  
+  Vm <- lucroMensal()
+  
+  taxa <- 0
+  for(i in 1:12){
+    t <- (1/(1+0.065))**i
+    print(t)
+    taxa <- taxa + t
+  }
+  
+  lucroAnual <- Vm*taxa
+  
+  lucroAnual
 }
+
 
 q4 <- function(amostra=3000){
   #Simulação do lucro em um ano
