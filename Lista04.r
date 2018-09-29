@@ -6,8 +6,7 @@ q1A <- function(amostra=3000){
   
   #Calcula quantos litros de gasolina é gasto por veiculo em cada cenário
   qLitros <- replicate(amostra, sum(rtriangle(frota, a=40, b=60, c=58)))
-  #Custo da gasolina por dia 
-  #assumindo que todos abastecem pelo mesmo preço a cada dia
+  
   custoL <- rtriangle(amostra, a=3.1, b=4, c=3.8)
   
   custoTotal <- qLitros * custoL
@@ -189,7 +188,7 @@ lucroMensal <- function(){
   #gasto cada grupo
   for(i in 1:30){
     gastoGrupoDiario <- rtriangle(nGrupos[i], 90,250,130)
-    lucroDiario <- rtriangle(nGrupos[i], 1.15,1.3,1.22)
+    lucroDiario <- rtriangle(nGrupos[i], 0.15,0.3,0.22)
     totalDia <- sum(gastoGrupoDiario * lucroDiario)
     total[i] <- totalDia
   }
@@ -207,7 +206,6 @@ vLucroTotal <- function(){
   taxa <- 0
   for(i in 1:12){
     t <- (1/(1+0.065))**i
-    print(t)
     taxa <- taxa + t
   }
   
@@ -224,3 +222,4 @@ q4 <- function(amostra=3000){
   hist(lucroAnual, main = "Valor Presente do Lucro total", xlab = "Lucro primeiro ano",
        ylab = "Frequencia")
 }
+
